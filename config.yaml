@@ -1,23 +1,55 @@
 # =====================================================================
-# Twitch Downloader Configuration Reference (Rolling Window / Channel Mode)
+# Twitch Downloader Configuration Reference (Profiles & Metadata)
+# Official Docs: https://github.com/yt-dlp/yt-dlp#readme
 # =====================================================================
 
-
 downloads:
-  # Example 1: Channel VOD download with download archive tracking
-  - source: "https://www.twitch.tv/streamername/videos"
-    quality: "best"
-    output_template: "downloads/streamername/%(upload_date)s - %(title)s.%(ext)s"
-    archive_file: "streamername_archive.txt"
-    extra_args:
-      - "--max-downloads"
-      - "5"
 
-  # Example 2: Channel download using 'url' alias with separate archive path
-  - url: "https://www.twitch.tv/anotherstreamer/videos"
-    quality: "720p60"
-    output_template: "downloads/anotherstreamer/%(title)s.%(ext)s"
-    archive_file: "downloads/anotherstreamer/archive.txt"
+  - name: "SingSing_Channel"
+    source: "https://www.twitch.tv/singsing"
+    format: "bestvideo+bestaudio/best"
     extra_args:
       - "--max-downloads"
       - "5"
+      - "--ignore-errors"
+      - "--embed-metadata"
+
+  - name: "Sing_Test_URL"
+    url: "https://www.twitch.tv/videos/2918476529"
+    format: "bestvideo+bestaudio/best"
+    extra_args:
+      - "--max-downloads"
+      - "5"
+      - "--ignore-errors"
+      - "--embed-metadata"
+
+# Examples:
+  # Example 1: Streamer Alpha with full metadata embedding enabled
+  # - name: "streamer_alpha"
+  #   source: "https://www.twitch.tv/streameralpha/videos"
+  #   format: "bestvideo+bestaudio/best"
+  #   output_template: "downloads/streamer_alpha/%(upload_date)s - %(title)s.%(ext)s"
+  #   archive_file: "archives/streamer_alpha.txt"
+  #   extra_args:
+  #     - "--max-downloads"
+  #     - "5"
+  #     - "--concurrent-fragments"
+  #     - "4"
+  #     - "--ignore-errors"
+  #     - "--embed-metadata"          # Embeds title, uploader, and date into file headers
+  #     - "--write-thumbnail"         # Saves the video preview image as a separate file
+  #     - "--write-description"       # Saves the stream description text file
+
+  # Example 2: Streamer Beta configuration using the 'url' alias
+  # - name: "streamer_beta"
+    # url: "https://www.twitch.tv/streamerbeta/videos"
+    # format: "1080p60"
+    # output_template: "downloads/streamer_beta/%(upload_date)s - %(title)s.%(ext)s"
+    # archive_file: "archives/streamer_beta.txt"
+    # extra_args:
+    #   - "--max-downloads"
+    #   - "5"
+    #   - "--concurrent-fragments"
+    #   - "4"
+    #   - "--ignore-errors"
+    #   - "--embed-metadata"
