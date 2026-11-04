@@ -7,7 +7,6 @@
   - name: "VIDEO_DOWNLOAD"
     source: "https://www.twitch.tv/streamerbeta/videos"
     format: "best"
-    archive: true
     extra_args:
       - "--max-downloads"
       - "5"
