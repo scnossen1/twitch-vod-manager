@@ -5,51 +5,34 @@
 
 downloads:
 
-  - name: "SingSing_Channel"
-    source: "https://www.twitch.tv/singsing"
-    format: "bestvideo+bestaudio/best"
-    extra_args:
-      - "--max-downloads"
-      - "5"
-      - "--ignore-errors"
-      - "--embed-metadata"
-
   - name: "Sing_Test_URL"
-    url: "https://www.twitch.tv/videos/2918476529"
-    format: "bestvideo+bestaudio/best"
+    url: "https://www.twitch.tv/videos/2751172343"
+    format: "best"
+    archive: false
     extra_args:
-      - "--max-downloads"
-      - "5"
+      - "--no-check-certificate"
       - "--ignore-errors"
       - "--embed-metadata"
 
-# Examples:
-  # Example 1: Streamer Alpha with full metadata embedding enabled
-  # - name: "streamer_alpha"
-  #   source: "https://www.twitch.tv/streameralpha/videos"
-  #   format: "bestvideo+bestaudio/best"
-  #   output_template: "downloads/streamer_alpha/%(upload_date)s - %(title)s.%(ext)s"
-  #   archive_file: "archives/streamer_alpha.txt"
+  # Example 1: Single VOD test — archive disabled so it doesn't log history
+  # - name: "CHANNEL_DOWNLOAD"
+  #   url: "https://www.twitch.tv/videos/2751172343"
+  #   format: "best"
+  #   archive: false              # Explicitly disables archiving for this profile
+  #   extra_args:
+  #     - "--no-check-certificate"
+  #     - "--ignore-errors"
+  #     - "--embed-metadata"
+
+  # Example 2: Channel rolling window mode — archive enabled (default)
+  # - name: "VIDEO_DOWNLOAD"
+  #   source: "https://www.twitch.tv/streamerbeta/videos"
+  #   format: "best"
+  #   archive: true               # Explicitly enables (or omits since True is default for channels)
   #   extra_args:
   #     - "--max-downloads"
   #     - "5"
   #     - "--concurrent-fragments"
   #     - "4"
   #     - "--ignore-errors"
-  #     - "--embed-metadata"          # Embeds title, uploader, and date into file headers
-  #     - "--write-thumbnail"         # Saves the video preview image as a separate file
-  #     - "--write-description"       # Saves the stream description text file
-
-  # Example 2: Streamer Beta configuration using the 'url' alias
-  # - name: "streamer_beta"
-    # url: "https://www.twitch.tv/streamerbeta/videos"
-    # format: "1080p60"
-    # output_template: "downloads/streamer_beta/%(upload_date)s - %(title)s.%(ext)s"
-    # archive_file: "archives/streamer_beta.txt"
-    # extra_args:
-    #   - "--max-downloads"
-    #   - "5"
-    #   - "--concurrent-fragments"
-    #   - "4"
-    #   - "--ignore-errors"
-    #   - "--embed-metadata"
+  #     - "--embed-metadata"
