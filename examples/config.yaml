@@ -1,0 +1,25 @@
+# =====================================================================
+# Twitch Downloader Configuration Reference (Profiles & Metadata)
+# Official Docs: https://github.com/yt-dlp/yt-dlp#readme
+# =====================================================================
+
+  # Example 1: Single VOD test — archive disabled so it doesn't log history
+  - name: "CHANNEL_DOWNLOAD"
+    url: "https://www.twitch.tv/videos/2751172343"
+    format: "best"
+    archive: false
+    extra_args:
+      - "--no-check-certificate"
+      - "--ignore-errors"
+      - "--embed-metadata"
+
+  # Example 2: Channel rolling window mode — archive enabled (default)
+  - name: "VIDEO_DOWNLOAD"
+    source: "https://www.twitch.tv/streamerbeta/videos"
+    format: "best"
+    archive: true
+    extra_args:
+      - "--max-downloads"
+      - "5"
+      - "--ignore-errors"
+      - "--embed-metadata"
