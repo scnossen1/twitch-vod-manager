@@ -11,21 +11,21 @@ import yaml
 def load_yaml(filepath):
   path = Path(filepath)
   if not path.exists():
-    return {}
+    return []
   try:
     with open(path, "r", encoding="utf-8") as f:
-      return yaml.safe_load(f) or {}
+      return yaml.safe_load(f) or []
   except Exception as e:
     print(f"Error loading '{filepath}': {e}")
-    return {}
+    return []
 
 
 def run_pipeline(config_path):
-  config = load_yaml(config_path)
-  downloads = config.get("downloads", [])
+  # Expect config.yaml to be a direct list of download profiles
+  downloads = load_yaml(config_path)
 
-  if not downloads:
-    print("No download profiles found in configuration.")
+  if not isinstance(downloads, list) or not downloads:
+    print("No download profiles found or invalid config format (expected a list).")
     return
 
   print(f"\n[Cycle Start] Found {len(downloads)} download profile(s). Starting execution...")
@@ -64,6 +64,10 @@ def main():
     run_pipeline(args.config)
 
     settings = load_yaml(args.settings)
+    # Fallback to default dict if settings is loaded as something else
+    if not isinstance(settings, dict):
+      settings = {}
+      
     refresh_hours = settings.get("refresh_interval_hours", 4)
     sleep_seconds = int(refresh_hours * 3600)
 
