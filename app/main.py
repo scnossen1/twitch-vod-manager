@@ -1,6 +1,7 @@
 from app.cleanup import prune_directory
-from app.downloader import build_ytdlp_command, resolve_profile
+from app.downloader import execute_download, resolve_profile
 import argparse
+from pathlib import Path
 import subprocess
 import sys
 import time
@@ -8,8 +9,11 @@ import yaml
 
 
 def load_yaml(filepath):
+  path = Path(filepath)
+  if not path.exists():
+    return {}
   try:
-    with open(filepath, "r", encoding="utf-8") as f:
+    with open(path, "r", encoding="utf-8") as f:
       return yaml.safe_load(f) or {}
   except Exception as e:
     print(f"Error loading '{filepath}': {e}")
@@ -32,15 +36,13 @@ def run_pipeline(config_path):
     
     print(f"=== Processing Profile [{profile_name}] ({idx}/{len(downloads)}) ===")
     try:
-      cmd = build_ytdlp_command(item)
-      subprocess.run(cmd, check=True)
+      # Step 1: Execute download via downloader.py
+      execute_download(item)
       print(f"Profile '{profile_name}' download finished successfully.")
 
-      if item["cleanup_enabled"]:
-        keep_count = item.get("max_keep", 5)
-        prune_directory(item["target_dir"], keep_count=keep_count)
-      else:
-        print(f"Skipping cleanup for '{profile_name}' (Single VOD mode).")
+      # Step 2: Universal rolling retention pruning for channel profiles
+      keep_count = item.get("max_keep", 5)
+      prune_directory(item["target_dir"], keep_count=keep_count)
 
       print("-" * 40)
       
@@ -52,26 +54,20 @@ def run_pipeline(config_path):
 
 def main():
   parser = argparse.ArgumentParser(description="Twitch VOD Downloader Daemon.")
-  parser.add_argument(
-      "-c", "--config", default="config.yaml", help="Path to config file"
-  )
-  parser.add_argument(
-      "-s", "--settings", default="settings.yaml", help="Path to settings file"
-  )
+  parser.add_argument("-c", "--config", default="config.yaml", help="Path to config file")
+  parser.add_argument("-s", "--settings", default="settings.yaml", help="Path to settings file")
   args = parser.parse_args()
 
-  print("Starting Twitch Downloader Daemon with isolated settings...")
+  print("Starting Streamlined Twitch Downloader Daemon...")
 
   while True:
-    # 1. Run the ingestion cycle using download config
     run_pipeline(args.config)
 
-    # 2. Re-read settings fresh on each cycle to pick up on-the-fly edits
     settings = load_yaml(args.settings)
     refresh_hours = settings.get("refresh_interval_hours", 4)
     sleep_seconds = int(refresh_hours * 3600)
 
-    print(f"\n[Cycle Complete] Sleeping for {refresh_hours} hour(s) ({sleep_seconds} seconds)...")
+    print(f"\n[Cycle Complete] Sleeping for {refresh_hours} hour(s)...")
     try:
       time.sleep(sleep_seconds)
     except KeyboardInterrupt:
