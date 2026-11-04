@@ -1,0 +1,11 @@
+services:
+  twitch-downloader:
+    build: .
+    container_name: twitch-downloader
+    restart: unless-stopped
+    volumes:
+      # Mount your YAML config file as read-only
+      - ./config.yaml:/app/config.yaml:ro
+      
+      # Mount local directories to persist downloads and archive state
+      - ./downloads:/app/downloads
