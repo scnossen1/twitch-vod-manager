@@ -60,6 +60,15 @@ def main():
   for idx, raw_item in enumerate(downloads, 1):
     item = resolve_profile(raw_item, idx)
     profile_name = item.get("name")
+
+    # Skip profiles where archiving or cleanup is explicitly disabled (e.g., single VOD tests)
+    is_archived = item.get("archive", True)
+    cleanup_enabled = item.get("cleanup", is_archived)
+    
+    if not cleanup_enabled:
+      print(f"\nSkipping cleanup for profile: '{profile_name}' (Cleanup/Archiving disabled)")
+      continue
+
     output_template = item.get("output_template") or item.get("output")
 
     # Extract the root directory path from the template
@@ -67,8 +76,11 @@ def main():
     base_parts = [p for p in parts if "%" not in p]
     target_dir = "/".join(base_parts) if base_parts else "."
 
+    # Allow custom retention limit per profile if specified, otherwise default to 5
+    keep_count = item.get("max_keep", 5)
+
     print(f"\nProcessing profile: '{profile_name}' (Dir: {target_dir})")
-    prune_directory(target_dir, keep_count=5)
+    prune_directory(target_dir, keep_count=keep_count)
 
   print("\n=== Cleanup Complete ===")
 
