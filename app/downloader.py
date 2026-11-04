@@ -65,42 +65,4 @@ def build_ytdlp_command(item):
 
   cmd.append(source)
   return cmd
-
-
-def main():
-  parser = argparse.ArgumentParser(description="Twitch VOD Downloader.")
-  parser.add_argument(
-      "-c", "--config", default="config.yaml", help="Path to config file"
-  )
-  args = parser.parse_args()
-
-  config = load_config(args.config)
-  downloads = config.get("downloads", [])
-
-  if not downloads:
-    print("No download profiles found in configuration.")
-    sys.exit(0)
-
-  print(f"Found {len(downloads)} download profile(s). Starting tasks...\n")
-
-  for idx, raw_item in enumerate(downloads, 1):
-    item = resolve_profile(raw_item, idx)
-    profile_name = item["name"]
-    
-    print(f"=== Processing Profile [{profile_name}] ({idx}/{len(downloads)}) ===")
-    try:
-      cmd = build_ytdlp_command(item)
-      # Let subprocess stream output directly to the terminal without manual piping
-      subprocess.run(cmd, check=True)
-      print(f"Profile '{profile_name}' finished successfully.\n")
-      
-    except subprocess.CalledProcessError as e:
-      print(f"\n[ERROR] yt-dlp failed on profile '{profile_name}' with exit code {e.returncode}\n")
-      sys.exit(e.returncode)
-    except Exception as e:
-      print(f"Unexpected error on profile '{profile_name}': {e}\n")
-      sys.exit(1)
-
-
-if __name__ == "__main__":
-  main()
+  
