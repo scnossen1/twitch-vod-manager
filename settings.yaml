@@ -1,0 +1,6 @@
+# =====================================================================
+# Global Daemon Runtime Settings
+# =====================================================================
+
+refresh_interval_hours: 4   # Edit this on the fly; daemon picks it up next cycle
+log_level: "INFO"           # Future extensibility for logging verbosity
