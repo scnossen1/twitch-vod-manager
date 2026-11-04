@@ -1,0 +1,23 @@
+# =====================================================================
+# Twitch Downloader Configuration Reference (Rolling Window / Channel Mode)
+# =====================================================================
+
+
+downloads:
+  # Example 1: Channel VOD download with download archive tracking
+  - source: "https://www.twitch.tv/streamername/videos"
+    quality: "best"
+    output_template: "downloads/streamername/%(upload_date)s - %(title)s.%(ext)s"
+    archive_file: "streamername_archive.txt"
+    extra_args:
+      - "--max-downloads"
+      - "5"
+
+  # Example 2: Channel download using 'url' alias with separate archive path
+  - url: "https://www.twitch.tv/anotherstreamer/videos"
+    quality: "720p60"
+    output_template: "downloads/anotherstreamer/%(title)s.%(ext)s"
+    archive_file: "downloads/anotherstreamer/archive.txt"
+    extra_args:
+      - "--max-downloads"
+      - "5"
